@@ -25,7 +25,7 @@ Nous pouvons aussi exprimer une température en Celsius. La température en Cels
 
 2. Convertir la température en Kelvins en stockant le résultat dans une variable nommée `celsius`.
    Ecrire un commentaire pour expliquer cette ligne de code.
-
+ 
 Nous pouvons aussi exprimer une température en Fahrenheit avec la formule :
 `Fahrenheits = Celsius * (9/5) + 32`
 
