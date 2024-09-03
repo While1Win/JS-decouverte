@@ -1,16 +1,20 @@
 // you can write js here
 //console.log('exo-3');
+var playerInput = prompt("Your choice ( rock, paper, scissors) ?");
 function getPlayerChoice(playerInput){
-    console.log(playerInput.toLowerCase());
+    playerInput = playerInput.toLowerCase();
+    if (playerInput == 'rock' || playerInput == 'paper' || playerInput == 'scissors' ){
+        return playerInput;
+    } else {
+        console.log("error");
+        return null
+    }
 
 }
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
-  console.log("random  = " + getRandomInt(3));
+
 function getComputerChoice(){
 
-    let entier = getRandomInt(3);
+    let entier = Math.floor(Math.random() * 3);
     let choix;
     switch (entier) {
         case 0 :
@@ -29,13 +33,9 @@ function getComputerChoice(){
     return choix;
 }
 
-console.log("computer = " + getComputerChoice());
-var playerInput = prompt("Your choice ( rock, paper, scissors) ?");
-if (playerInput == 'rock' || playerInput == 'Rock' || playerInput == 'paper' || playerInput =='Paper' || playerInput == 'scissors' || playerInput == 'Scissors'){
-    getPlayerChoice(playerInput);
-} else {
-    console.log("error");
-}
+//console.log("computer = " + getComputerChoice());
+
+
 
 
 function findWinner(playerChoice, computerChoice) {
