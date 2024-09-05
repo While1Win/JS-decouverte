@@ -1,67 +1,63 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-    </head>
-    <body>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <h1>Exercice 0</h1>
 
-        <h1>Exercice 0</h1>
+    <script type="text/javascript">
+      /* Section 1 */
 
-        <script type="text/javascript">
+      var name = "Joe";
+      var city = "London";
+      var age = 32;
+      var isRed = true;
+      var isOld = age > 80;
 
-        /* Section 1 */   
+      var previousJobs = ["lawyer", "developper", "Professionnal climber"];
 
-        var name = "Joe";
-        var city = 'London';
-        var age = 32;
-        var isRed = true;
-        var isOld = age > 80;
-
-        var previousJobs = ['lawyer', 'developper', 'Professionnal climber'];
-
-        function info(height, weight) {
-            if (height > 180) {
-                console.log('Vous êtes grand');
-            }
-            if (weight < 0) {
-                console.log('oups, there is a problem');
-            } else if ( weight < 15) {
-                console.log('Are you that slim ?')
-            } else {
-                console.log('Good !')
-            }
+      function info(height, weight) {
+        if (height > 180) {
+          console.log("Vous êtes grand");
         }
-
-        info(165, 45);
-
-        var myHeight = 175;
-        var myWeight = 86;
-
-        info(myHeight, myWeight);
-
-        info(myHeight + 15, myWeight - 100);
-
-        function toUpper(variable) {
-            return variable.toUpperCase();
+        if (weight < 0) {
+          console.log("oups, there is a problem");
+        } else if (weight < 15) {
+          console.log("Are you that slim ?");
+        } else {
+          console.log("Good !");
         }
+      }
 
-        var upperName = toUpper(name);
+      info(165, 45);
 
-        for (i = 0; i < 3; i = i + 1) {
-            console.log(previousJobs[i]);
-        }
+      var myHeight = 175;
+      var myWeight = 86;
 
-        /* Section 2: */
+      info(myHeight, myWeight);
 
-        // afficher la ville dans laquele Joe vit.     
+      info(myHeight + 15, myWeight - 100);
 
-        // afficher si Joe est roux ou pas.
+      function toUpper(variable) {
+        return variable.toUpperCase();
+      }
 
-        /* Section 3 */
+      var upperName = toUpper(name);
 
-        // console.log(myVariable);
+      for (i = 0; i < 3; i = i + 1) {
+        console.log(previousJobs[i]);
+      }
 
-        </script>
+      /* Section 2: */
 
-    </body>
+      // afficher la ville dans laquele Joe vit.
+
+      // afficher si Joe est roux ou pas.
+
+      /* Section 3 */
+
+      // console.log(myVariable);
+    </script>
+  </body>
 </html>

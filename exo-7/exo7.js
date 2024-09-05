@@ -1,105 +1,166 @@
 console.log("exo-7");
 
-//console.log(jsonDatas);
-for (let i = 0; i < jsonDatas.length; i++) {
-    console.log(jsonDatas[i]);
-}
+// Fonction pour afficher les articles
+function display_Products(data) {
+  let product_container = document.getElementById("container");
+  product_container.innerHTML = ""; // On vide d'abord le conteneur
 
-let types_traduit = {
-    car: "voiture",
-    house: "maison",
-    game: "jeu",
-    videoGame: "jeux videos",
-    show: "spectacle"
-};
+  // Parcourir chaque type d'articles (ex: car, house)
+  data.forEach(function (category) {
+    let category_div = document.createElement("div");
+    category_div.innerHTML = `<h2>Type : ${category.type}</h2>`;
+    product_container.appendChild(category_div);
 
-jsonDatas.forEach(function(item) {
-   
-    item.types_traduit = types_traduit[item.type] || item.type;
-});
-
-// Vérification : Afficher les objets avec le type traduit
-jsonDatas.forEach(function(item) {
-    console.log("Nom :", item.name);
-    console.log("Type original :", item.type);
-    console.log("Type traduit :", item.types_traduit); // Afficher le type traduit
-    console.log("Description :", item.description);
-    console.log("Prix :", item.price);
-    console.log("Quantité :", item.quantity);
-    console.log("-----------------------------");
-});
-
-function display_Products(container){
-    let product_container = document.getElementById("container");
-    console.log("container", product_container)
-    product_container.innerHTML = "";
-
-
-    container.forEach(function(item){
-        let container_div = document.createElement("div");
-        container_div.innerHTML = `
+    // Parcourir chaque article de la catégorie
+    category.items.forEach(function (item) {
+      let item_div = document.createElement("div");
+      item_div.innerHTML = `
             <h3> ${item.name}</h3>
-            <p> Type : ${item.types_traduit} </p>
-            <p> Descrioption : ${item.description || "Rien à afficher"} </p>
-            <p>Prix : ${item.price} € </p>
-            <p>Quantité : ${item.quantity}</p>
-            <hr>
-        
-        
-        `;
-        product_container.appendChild(container_div);
-    })
+            <p> Description : ${item.description || "Rien à afficher"} </p>
+            <p> Prix : ${item.price} € </p>
+            <p> Quantité : ${item.quantity}</p>
+            <p> Contact : ${item.contact.firstName} ${item.contact.lastName}, ${
+        item.contact.address
+      }</p>
+            <hr>`;
+      category_div.appendChild(item_div);
+    });
+  });
 }
+
+// Affichage initial de tous les articles
 display_Products(jsonDatas);
-// comment on utilise foreach
-// exo7.js
 
-/* jsonDatas.forEach(function(item) {
-    console.log(item);
-});
-console.log("---------------");
- */
-/** another way of using for in javascript
- *  For ... of
- */
-/* for (let jsonData of jsonDatas) {
-    console.log(jsonData);
-}
- */
-/**FOR IN */
+// Filtrer les articles par type et disponibilité en stock
+document.getElementById("filter").addEventListener("click", function () {
+  let typeInput = document.getElementById("type").value.trim().toLowerCase();
+  let includeOutOfStock = document.getElementById("stockCheckbox").checked;
 
-/*for (const key in object) {
-    if (Object.prototype.hasOwnProperty.call(object, key)) {
-        const element = object[key];
-        
+  let filteredArticles = [];
+
+  jsonDatas.forEach(function (category) {
+    if (!typeInput || category.type.toLowerCase() === typeInput) {
+      let filteredItems = category.items.filter(function (item) {
+        return includeOutOfStock || item.quantity > 0;
+      });
+
+      if (filteredItems.length > 0) {
+        filteredArticles.push({
+          type: category.type,
+          items: filteredItems,
+        });
+      }
     }
-}*/
+  });
 
-/** entries ca donne la clé et sa valeur, on peut aussi utilier Keys ou values */
-//console.log(object.entries(jsonDatas));
+  display_Products(filteredArticles);
+});
 
-/** yet another way */
-/* for(let [key, val] of jsonDatas){
-    console.log(key);
-    console.log(val);
+// Fonction de tri des articles
+function sortArticles(articles) {
+  // Récupérer le critère de tri (nom ou prix)
+  let sortCriteria = document.querySelector(
+    'input[name="sortCriteria"]:checked'
+  ).value;
+
+  // Récupérer l'ordre de tri (ascendant ou descendant)
+  let sortOrder = document.querySelector(
+    'input[name="sortOrder"]:checked'
+  ).value;
+
+  articles.forEach(function (category) {
+    category.items.sort(function (a, b) {
+      let valueA = a[sortCriteria];
+      let valueB = b[sortCriteria];
+
+      // Si on trie par nom, on compare en ignorant la casse
+      if (sortCriteria === "name") {
+        valueA = valueA.toLowerCase();
+        valueB = valueB.toLowerCase();
+      }
+
+      // Comparaison selon l'ordre choisi (ascendant ou descendant)
+      if (valueA < valueB) {
+        return sortOrder === "asc" ? -1 : 1;
+      } else if (valueA > valueB) {
+        return sortOrder === "asc" ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+  });
+
+  return articles;
 }
- */
 
+// Tri des articles au clic du bouton "Trier"
+document.getElementById("sortButton").addEventListener("click", function () {
+  let filteredArticles = [];
 
-document.getElementById("filter").addEventListener("click", function() {
-    let typeInput = document.getElementById("type").value.trim().toLowerCase();
-    let includeOutOfStock = document.getElementById("stockCheckbox").checked;
+  jsonDatas.forEach(function (category) {
+    let filteredItems = category.items;
+    if (filteredItems.length > 0) {
+      filteredArticles.push({
+        type: category.type,
+        items: filteredItems,
+      });
+    }
+  });
 
-    let filteredArticles = jsonDatas.filter(function(item) {
-        // Filtrer par type si un type est spécifié
-        let matchesType = typeInput ? item.type.toLowerCase() === typeInput : true;
+  let sortedArticles = sortArticles(filteredArticles);
 
-        // Filtrer par stock si la checkbox n'est pas cochée
-        let inStock = includeOutOfStock ? true : item.quantity > 0;
+  // Affichage des articles triés
+  display_Products(sortedArticles);
+});
 
-        return matchesType && inStock;
+// Ajouter un nouvel article via le formulaire
+document
+  .getElementById("addArticleForm")
+  .addEventListener("submit", function (event) {
+    event.preventDefault(); // Empêcher le rechargement de la page lors de la soumission du formulaire
+
+    // Récupérer les valeurs du formulaire
+    let name = document.getElementById("name").value.trim();
+    let type = document.getElementById("type").value.trim().toLowerCase();
+    let description = document.getElementById("description").value.trim();
+    let price = parseFloat(document.getElementById("price").value);
+    let quantity = parseInt(document.getElementById("quantity").value);
+    let lastName = document.getElementById("lastName").value.trim();
+    let firstName = document.getElementById("firstName").value.trim();
+    let address = document.getElementById("address").value.trim();
+
+    // Vérifier si la catégorie existe déjà
+    let category = jsonDatas.find(function (cat) {
+      return cat.type === type;
     });
 
-    display_Products(filteredArticles);
-});
-//display_Products(filteredArticles);
+    // Créer un nouvel article
+    let newItem = {
+      name: name,
+      description: description || "Rien à afficher",
+      price: price,
+      quantity: quantity,
+      contact: {
+        lastName: lastName,
+        firstName: firstName,
+        address: address,
+      },
+    };
+
+    // Si la catégorie existe, ajouter l'article
+    if (category) {
+      category.items.push(newItem);
+    } else {
+      // Si la catégorie n'existe pas, la créer et ajouter l'article
+      jsonDatas.push({
+        type: type,
+        items: [newItem],
+      });
+    }
+
+    // Réafficher les articles mis à jour
+    display_Products(jsonDatas);
+
+    // Optionnel : Vider le formulaire après l'ajout
+    document.getElementById("addArticleForm").reset();
+  });
